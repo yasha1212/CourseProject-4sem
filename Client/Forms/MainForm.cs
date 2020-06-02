@@ -63,6 +63,7 @@ namespace Client
         private void bStart_Click(object sender, EventArgs e)
         {
             client.Port = int.Parse(tbPort.Text);
+            client.FPS = 60;
 
             client.Start();
 

@@ -11,6 +11,8 @@ namespace Client
 {
     public static class ScreenCaptureUtility
     {
+        private const int SENDING_DELAY = 10;
+
         public static Image CaptureDesktop()
         {
             var bounds = Screen.PrimaryScreen.Bounds;
@@ -26,7 +28,7 @@ namespace Client
 
         public static int GetDelay(int fps)
         {
-            return (int)(1000 / fps - 5);
+            return (int)(1000 / fps - SENDING_DELAY);
         }
     }
 }

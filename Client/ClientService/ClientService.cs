@@ -57,7 +57,8 @@ namespace Client
 
         public void Disconnect()
         {
-            throw new NotImplementedException();
+            clientSocket?.Close();
+            receiveThread?.Abort();
         }
 
         public void Connect()
@@ -89,10 +90,10 @@ namespace Client
 
         public void Close()
         {
-            listenThread?.Abort();
-            receiveThread?.Abort();
+            Disconnect();
 
-            listenSocket.Close();
+            listenSocket?.Close();
+            listenThread?.Abort();
         }
 
         private ClientService()
@@ -104,11 +105,21 @@ namespace Client
         {
             listenSocket.Listen(MAX_CONNECTIONS);
 
-            while (true) // сделать код данного цикла более элегантным
+            try
             {
-                if (clientSocket != null)
+                while (true) // сделать код данного цикла более элегантным
                 {
-                    if (!clientSocket.Connected)
+                    if (clientSocket != null)
+                    {
+                        if (!clientSocket.Connected)
+                        {
+                            clientSocket = listenSocket.Accept();
+
+                            receiveThread = new Thread(BroadcastScreen);
+                            receiveThread.Start();
+                        }
+                    }
+                    else
                     {
                         clientSocket = listenSocket.Accept();
 
@@ -116,13 +127,9 @@ namespace Client
                         receiveThread.Start();
                     }
                 }
-                else
-                {
-                    clientSocket = listenSocket.Accept();
-
-                    receiveThread = new Thread(BroadcastScreen);
-                    receiveThread.Start();
-                }
+            }
+            catch
+            {
             }
         }
 
@@ -141,6 +148,7 @@ namespace Client
                 catch
                 {
                     HandleError?.Invoke("Соединение было разорвано.");
+                    Disconnect();
                 }
             }
         }
@@ -167,10 +175,9 @@ namespace Client
                 catch
                 {
                     HandleError?.Invoke("Соединение было разорвано.");
+                    Disconnect();
                 }
             }
-
-            Disconnect();
         }
 
         private void HandleImage(Image receivedImage)
