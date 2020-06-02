@@ -51,6 +51,7 @@ namespace Client
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            client.Close();
         }
 
         private void bConnect_Click(object sender, EventArgs e)

@@ -24,6 +24,7 @@ namespace Client
 
         public int Port { get; set; }
         public IPAddress IP { get; private set; }
+        public int FPS { get; set; }
 
         private ISerializer serializer;
         private Socket clientSocket;
@@ -88,9 +89,9 @@ namespace Client
 
         public void Close()
         {
-            listenThread.Abort();
+            listenThread?.Abort();
+            receiveThread?.Abort();
 
-            listenSocket.Shutdown(SocketShutdown.Both);
             listenSocket.Close();
         }
 
@@ -111,7 +112,7 @@ namespace Client
                     {
                         clientSocket = listenSocket.Accept();
 
-                        receiveThread = new Thread(ReceiveImage);
+                        receiveThread = new Thread(BroadcastScreen);
                         receiveThread.Start();
                     }
                 }
@@ -119,8 +120,27 @@ namespace Client
                 {
                     clientSocket = listenSocket.Accept();
 
-                    receiveThread = new Thread(ReceiveImage);
+                    receiveThread = new Thread(BroadcastScreen);
                     receiveThread.Start();
+                }
+            }
+        }
+
+        private void BroadcastScreen()
+        {
+            while (clientSocket.Connected)
+            {
+                try
+                {
+                    var screenshot = ScreenCaptureUtility.CaptureDesktop();
+
+                    clientSocket.Send(serializer.Serialize(screenshot));
+
+                    Thread.Sleep(ScreenCaptureUtility.GetDelay(FPS));
+                }
+                catch
+                {
+                    HandleError?.Invoke("Соединение было разорвано.");
                 }
             }
         }

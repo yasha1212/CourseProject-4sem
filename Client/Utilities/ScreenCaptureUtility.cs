@@ -23,5 +23,10 @@ namespace Client
 
             return bitmap;
         }
+
+        public static int GetDelay(int fps)
+        {
+            return (int)(1000 / fps - 5);
+        }
     }
 }
