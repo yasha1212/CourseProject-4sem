@@ -62,35 +62,35 @@
             // 
             // tbIP
             // 
-            this.tbIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.tbIP.Location = new System.Drawing.Point(884, 77);
             this.tbIP.Name = "tbIP";
             this.tbIP.ReadOnly = true;
-            this.tbIP.Size = new System.Drawing.Size(173, 28);
+            this.tbIP.Size = new System.Drawing.Size(173, 34);
             this.tbIP.TabIndex = 2;
             // 
             // tbPort
             // 
-            this.tbPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tbPort.Location = new System.Drawing.Point(884, 111);
+            this.tbPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbPort.Location = new System.Drawing.Point(884, 117);
             this.tbPort.Name = "tbPort";
-            this.tbPort.Size = new System.Drawing.Size(173, 28);
+            this.tbPort.Size = new System.Drawing.Size(173, 34);
             this.tbPort.TabIndex = 3;
             // 
             // tbRemotePort
             // 
-            this.tbRemotePort.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tbRemotePort.Location = new System.Drawing.Point(884, 259);
+            this.tbRemotePort.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbRemotePort.Location = new System.Drawing.Point(884, 265);
             this.tbRemotePort.Name = "tbRemotePort";
-            this.tbRemotePort.Size = new System.Drawing.Size(173, 28);
+            this.tbRemotePort.Size = new System.Drawing.Size(173, 34);
             this.tbRemotePort.TabIndex = 5;
             // 
             // tbRemoteIP
             // 
-            this.tbRemoteIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbRemoteIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.tbRemoteIP.Location = new System.Drawing.Point(884, 225);
             this.tbRemoteIP.Name = "tbRemoteIP";
-            this.tbRemoteIP.Size = new System.Drawing.Size(173, 28);
+            this.tbRemoteIP.Size = new System.Drawing.Size(173, 34);
             this.tbRemoteIP.TabIndex = 4;
             // 
             // bStart
@@ -116,6 +116,8 @@
             this.Controls.Add(this.tbIP);
             this.Controls.Add(this.bConnect);
             this.Controls.Add(this.pbScreen);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "RemoteScreen";

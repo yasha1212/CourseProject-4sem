@@ -57,8 +57,8 @@ namespace Client
 
         public void Disconnect()
         {
+            receiveThread?.Join(1);
             clientSocket?.Close();
-            receiveThread?.Abort();
         }
 
         public void Connect()
@@ -151,16 +151,22 @@ namespace Client
                     Disconnect();
                 }
             }
+            HandleError?.Invoke("Трансляция экрана завершена.");
         }
 
         private void ReceiveImage()
         {
+            const int MAX_WAITING_TIME = 100;
+            int waitingTime = 0;
+
             while (clientSocket.Connected)
             {
                 var stream = new MemoryStream();
 
                 try
                 {
+                    waitingTime++;
+
                     do
                     {
                         var data = new byte[BUFF_SIZE];
@@ -169,15 +175,27 @@ namespace Client
                     }
                     while (clientSocket.Available > 0);
 
-                    Image image = serializer.Deserialize(stream.ToArray()) as Image;
-                    HandleImage(image);
+                    if (stream.Length > 0)
+                    {
+                        waitingTime = 0;
+
+                        Image image = serializer.Deserialize(stream.ToArray()) as Image;
+                        HandleImage(image);
+                    }
+
+                    if (waitingTime >= MAX_WAITING_TIME)
+                    {
+                        throw new SocketException();
+                    }
                 }
                 catch
                 {
                     HandleError?.Invoke("Соединение было разорвано.");
+                    Thread.CurrentThread.Join(1);
                     Disconnect();
                 }
             }
+            HandleError?.Invoke("Источник больше не доступен.");
         }
 
         private void HandleImage(Image receivedImage)

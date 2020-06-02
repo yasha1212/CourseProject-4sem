@@ -26,6 +26,7 @@ namespace Client
 
             client = ClientService.GetInstance();
             client.SetUpdateHandler(UpdateRemoteDisplay);
+            client.SetErrorHandler(DisplayErrorMessage);
 
             DPIUtility.SetDpiAwareness();
             SetAppWindow();
@@ -49,6 +50,11 @@ namespace Client
             pbScreen.Image = last;
         }
 
+        private void DisplayErrorMessage(string message)
+        {
+            MessageBox.Show(message, "Соединение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             client.Close();
@@ -63,7 +69,7 @@ namespace Client
         private void bStart_Click(object sender, EventArgs e)
         {
             client.Port = int.Parse(tbPort.Text);
-            client.FPS = 60;
+            client.FPS = 60;                         // перевести в GUI
 
             client.Start();
 
