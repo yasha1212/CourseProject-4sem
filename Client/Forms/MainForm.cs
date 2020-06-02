@@ -7,6 +7,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -17,10 +18,16 @@ namespace Client
         private const double WIDTH_SCALE = 1.33043478;
         private const double HEIGHT_SCALE = 1.22878229;
 
+        private ClientService client;
+
         public MainForm()
         {
             InitializeComponent();
-            DPISetUtility.SetDpiAwareness();
+
+            client = ClientService.GetInstance();
+            client.SetUpdateHandler(UpdateRemoteDisplay);
+
+            DPIUtility.SetDpiAwareness();
             SetAppWindow();
         }
 
@@ -37,9 +44,29 @@ namespace Client
             }
         }
 
-        private void bScreenshot_Click(object sender, EventArgs e)
+        private void UpdateRemoteDisplay(Image last)
         {
-            pbScreen.Image = ScreenCaptureUtility.CaptureDesktop();
+            pbScreen.Image = last;
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+        }
+
+        private void bConnect_Click(object sender, EventArgs e)
+        {
+            client.SetRemoteParams(tbRemoteIP.Text, int.Parse(tbRemotePort.Text));
+            client.Connect();
+        }
+
+        private void bStart_Click(object sender, EventArgs e)
+        {
+            client.Port = int.Parse(tbPort.Text);
+
+            client.Start();
+
+            tbIP.Text = client.IP.ToString();
+            tbPort.Text = client.Port.ToString();
         }
     }
 }
