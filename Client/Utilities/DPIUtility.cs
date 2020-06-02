@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Client
 {
-    public static class DPISetUtility
+    public static class DPIUtility
     {
         private enum ProcessDPIAwareness
         {
