@@ -21,6 +21,7 @@ namespace Client
 
         private event Action<Image> UpdateDisplay;
         private event Action<string> HandleError;
+        private event Func<bool> HandleRequest;
 
         public int Port { get; set; }
         public IPAddress IP { get; private set; }
@@ -30,6 +31,7 @@ namespace Client
         private Socket clientSocket;
         private Socket listenSocket;
         private Thread receiveThread;
+        private Thread broadcastThread;
         private Thread listenThread;
         private IPAddress remoteAddress;
         private int remotePort;
@@ -68,7 +70,7 @@ namespace Client
             var remotePoint = new IPEndPoint(remoteAddress, remotePort);
             clientSocket.Connect(remotePoint);
 
-            receiveThread = new Thread(ReceiveImage);
+            receiveThread = new Thread(ReceivePackages);
             receiveThread.Start();
         }
 
@@ -82,10 +84,27 @@ namespace Client
             HandleError += handler;
         }
 
+        public void SetRequestHandler(Func<bool> handler)
+        {
+            HandleRequest += handler;
+        }
+
         public void SetRemoteParams(string ip, int port)
         {
             remoteAddress = IPAddress.Parse(ip);
             remotePort = port;
+        }
+
+        public void SendConnectionRequest()
+        {
+            Connect();
+
+            var package = new ConnectionRequestPackage(IP, Port, PackageType.ConnectionRequest);
+
+            if (clientSocket.Connected)
+            {
+                clientSocket.Send(serializer.Serialize(package));
+            }
         }
 
         public void Close()
@@ -115,7 +134,7 @@ namespace Client
                         {
                             clientSocket = listenSocket.Accept();
 
-                            receiveThread = new Thread(BroadcastScreen);
+                            receiveThread = new Thread(ReceivePackages);
                             receiveThread.Start();
                         }
                     }
@@ -123,13 +142,23 @@ namespace Client
                     {
                         clientSocket = listenSocket.Accept();
 
-                        receiveThread = new Thread(BroadcastScreen);
+                        receiveThread = new Thread(ReceivePackages);
                         receiveThread.Start();
                     }
                 }
             }
             catch
             {
+            }
+        }
+
+        private void SendConnectionResponse(bool response)
+        {
+            var package = new ConnectionResponsePackage(response, IP, Port, PackageType.ConnectionResponse);
+
+            if (clientSocket.Connected)
+            {
+                clientSocket.Send(serializer.Serialize(package));
             }
         }
 
@@ -140,8 +169,9 @@ namespace Client
                 try
                 {
                     var screenshot = ScreenCaptureUtility.CaptureDesktop();
+                    var package = new SourcePackage(screenshot, PackageType.SourcePackage);
 
-                    clientSocket.Send(serializer.Serialize(screenshot));
+                    clientSocket.Send(serializer.Serialize(package));
 
                     Thread.Sleep(ScreenCaptureUtility.GetDelay(FPS));
                 }
@@ -154,7 +184,7 @@ namespace Client
             HandleError?.Invoke("Трансляция экрана завершена.");
         }
 
-        private void ReceiveImage()
+        private void ReceivePackages()
         {
             const int MAX_WAITING_TIME = 100;
             int waitingTime = 0;
@@ -179,8 +209,8 @@ namespace Client
                     {
                         waitingTime = 0;
 
-                        Image image = serializer.Deserialize(stream.ToArray()) as Image;
-                        HandleImage(image);
+                        Package package = serializer.Deserialize(stream.ToArray()) as Package;
+                        HandlePackage(package);
                     }
 
                     if (waitingTime >= MAX_WAITING_TIME)
@@ -198,9 +228,43 @@ namespace Client
             HandleError?.Invoke("Источник больше не доступен.");
         }
 
-        private void HandleImage(Image receivedImage)
+        private void HandlePackage(Package package)
         {
-            UpdateDisplay?.Invoke(receivedImage);
+            switch (package.PackageType)
+            {
+                case PackageType.ConnectionRequest:
+
+                    var response = (bool)HandleRequest?.Invoke();
+                    SendConnectionResponse(response);
+
+                    if (response)
+                    {
+                        broadcastThread = new Thread(BroadcastScreen);
+                        broadcastThread.Start();
+                    }
+
+                    break;
+
+                case PackageType.ConnectionResponse:
+
+                    var isAllowed = (package as ConnectionResponsePackage).IsAllowed;
+
+                    if (!isAllowed)
+                    {
+                        HandleError?.Invoke("Пользователь отказал вам в соединении.");
+                        Disconnect();
+                    }
+
+                    break;
+
+                case PackageType.SourcePackage:
+
+                    var image = (package as SourcePackage).Screenshot;
+
+                    UpdateDisplay?.Invoke(image);
+
+                    break;
+            }
         }
     }
 }

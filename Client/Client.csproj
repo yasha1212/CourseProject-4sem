@@ -46,10 +46,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PackageTypes\ConnectionRequestPackage.cs" />
+    <Compile Include="PackageTypes\ConnectionResponsePackage.cs" />
+    <Compile Include="PackageTypes\DestinationPackage.cs" />
+    <Compile Include="PackageTypes\Package.cs" />
     <Compile Include="SerializeService\BinarySerializeService.cs" />
     <Compile Include="ClientService\ClientService.cs" />
     <Compile Include="ClientService\IClientService.cs" />
     <Compile Include="SerializeService\ISerializer.cs" />
+    <Compile Include="PackageTypes\SourcePackage.cs" />
     <Compile Include="Utilities\CheckUtility.cs" />
     <Compile Include="Utilities\DPIUtility.cs" />
     <Compile Include="Forms\MainForm.cs">

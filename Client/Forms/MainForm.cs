@@ -31,6 +31,7 @@ namespace Client
             client.FPS = fps;
             client.SetUpdateHandler(UpdateRemoteDisplay);
             client.SetErrorHandler(DisplayErrorMessage);
+            client.SetRequestHandler(DisplayRequestBox);
 
             DPIUtility.SetDpiAwareness();
             SetAppWindow();
@@ -73,6 +74,20 @@ namespace Client
             MessageBox.Show(message, "Соединение", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        private bool DisplayRequestBox()
+        {
+            var result = MessageBox.Show("Разрешить пользователю подключение?", "Подключение", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            
+            if (result == DialogResult.Yes)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             client.Close();
@@ -84,7 +99,7 @@ namespace Client
             {
                 client.SetRemoteParams(tbRemoteIP.Text, int.Parse(tbRemotePort.Text));
                 client.FPS = int.Parse(cbFPS.SelectedItem.ToString());
-                client.Connect();
+                client.SendConnectionRequest(); 
 
                 bConnect.Enabled = false;
                 tbRemotePort.Enabled = false;
