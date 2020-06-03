@@ -50,6 +50,7 @@
     <Compile Include="ClientService\ClientService.cs" />
     <Compile Include="ClientService\IClientService.cs" />
     <Compile Include="SerializeService\ISerializer.cs" />
+    <Compile Include="Utilities\CheckUtility.cs" />
     <Compile Include="Utilities\DPIUtility.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
