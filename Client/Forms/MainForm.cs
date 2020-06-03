@@ -97,7 +97,7 @@ namespace Client
             var x = (int)(position.X * xScale);
             var y = (int)(position.Y * yScale);
 
-            //Cursor.Position = new Point(x, y); -- release feature
+            Cursor.Position = new Point(x, y); -- release feature
         }
 
         private void DisplayErrorMessage(string message)
@@ -195,11 +195,6 @@ namespace Client
             this.MaximizeBox = false;
             tbRemoteIP.Enabled = true;
             tbRemotePort.Enabled = true;
-
-            if (pbScreen.Image != null)
-            {
-                pbScreen.Image.Dispose();
-            }
         }
 
         private void tbPort_KeyPress(object sender, KeyPressEventArgs e)
