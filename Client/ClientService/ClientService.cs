@@ -136,7 +136,7 @@ namespace Client
 
             try
             {
-                while (true) // сделать код данного цикла более элегантным
+                while (true)
                 {
                     if (clientSocket != null)
                     {
