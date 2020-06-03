@@ -145,7 +145,10 @@ namespace Client
             bConnect.Enabled = false;
             tbRemoteIP.Enabled = true;
             tbRemotePort.Enabled = true;
-            pbScreen.Image.Dispose();
+            if (pbScreen.Image != null)
+            {
+                pbScreen.Image.Dispose();
+            }
         }
 
         private void tbPort_KeyPress(object sender, KeyPressEventArgs e)
