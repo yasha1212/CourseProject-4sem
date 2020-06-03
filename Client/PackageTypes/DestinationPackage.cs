@@ -11,10 +11,12 @@ namespace Client
     public class DestinationPackage : Package
     {
         public Point MouseCoordinates { get; private set; }
+        public Rectangle Bounds { get; private set; }
 
-        public DestinationPackage(Point mouseCoords, PackageType type) : base(type)
+        public DestinationPackage(Point mouseCoords, Rectangle bounds, PackageType type) : base(type)
         {
             MouseCoordinates = mouseCoords;
+            Bounds = bounds;
         }
     }
 }

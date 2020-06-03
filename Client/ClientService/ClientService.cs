@@ -20,7 +20,7 @@ namespace Client
         private static ClientService instance;
 
         private event Action<Image> UpdateDisplay;
-        private event Action<Point> UpdateMousePosition;
+        private event Action<Point, Rectangle> UpdateMousePosition;
         private event Action<string> HandleError;
         private event Func<bool> HandleRequest;
 
@@ -28,6 +28,7 @@ namespace Client
         public IPAddress IP { get; private set; }
         public int FPS { get; set; }
         public Point MouseCoordinates { get; set; }
+        public Rectangle DisplayBounds { get; set; }
 
         private ISerializer serializer;
         private Socket clientSocket;
@@ -82,7 +83,7 @@ namespace Client
             UpdateDisplay += handler;
         }
 
-        public void SetMouseUpdateHandler(Action<Point> handler)
+        public void SetMouseUpdateHandler(Action<Point, Rectangle> handler)
         {
             UpdateMousePosition += handler;
         }
@@ -199,7 +200,7 @@ namespace Client
             {
                 try
                 {
-                    var package = new DestinationPackage(MouseCoordinates, PackageType.DestinationPackage);
+                    var package = new DestinationPackage(MouseCoordinates, DisplayBounds, PackageType.DestinationPackage);
 
                     clientSocket.Send(serializer.Serialize(package));
                 }
@@ -298,8 +299,9 @@ namespace Client
                 case PackageType.DestinationPackage:
 
                     var coordinates = (package as DestinationPackage).MouseCoordinates;
+                    var bounds = (package as DestinationPackage).Bounds;
 
-                    UpdateMousePosition?.Invoke(coordinates);
+                    UpdateMousePosition?.Invoke(coordinates, bounds);
 
                     break;
             }

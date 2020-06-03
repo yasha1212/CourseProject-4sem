@@ -19,6 +19,9 @@ namespace Client
         private const double WIDTH_SCALE = 1.33043478;
         private const double HEIGHT_SCALE = 1.22878229;
 
+        const int Y_DELAY = 84;
+        const int X_DELAY = 10;
+
         private ClientService client;
         private int fps;
 
@@ -27,8 +30,13 @@ namespace Client
             InitializeComponent();
             InitializeForm();
 
+            var bounds = new Rectangle();
+            bounds.Width = 817;
+            bounds.Height = 458;
+
             client = ClientService.GetInstance();
             client.FPS = fps;
+            client.DisplayBounds = bounds;
             client.SetUpdateHandler(UpdateRemoteDisplay);
             client.SetErrorHandler(DisplayErrorMessage);
             client.SetMouseUpdateHandler(UpdateMousePosition);
@@ -51,13 +59,21 @@ namespace Client
             ChangeSizes(this);
         }
 
+        private Rectangle GetCorrectSize(Control control)
+        {
+            var rectangle = new Rectangle();
+            rectangle.Width = (int)(control.Width * WIDTH_SCALE);
+            rectangle.Height = (int)(control.Height * HEIGHT_SCALE);
+            rectangle.Location = new Point((int)(control.Location.X * WIDTH_SCALE), (int)(control.Location.Y * HEIGHT_SCALE));
+
+            return rectangle;
+        }
+
         private void ChangeSizes(Control master)
         {
             foreach (Control child in master.Controls)
             {
-                child.Width = (int)(child.Width * WIDTH_SCALE);
-                child.Height = (int)(child.Height * HEIGHT_SCALE);
-                child.Location = new Point((int)(child.Location.X * WIDTH_SCALE), (int)(child.Location.Y * HEIGHT_SCALE));
+                child.Bounds = GetCorrectSize(child);
                 if (child.GetType() == typeof(Panel))
                 {
                     ChangeSizes(child);
@@ -70,10 +86,16 @@ namespace Client
             pbScreen.Image = last;
         }
 
-        private void UpdateMousePosition(Point position)
+        private void UpdateMousePosition(Point position, Rectangle bounds)
         {
-            tbX.Text = position.X.ToString();
-            tbY.Text = position.Y.ToString();
+            var size = Screen.PrimaryScreen.Bounds;
+            var xScale = (double)(size.Width) / bounds.Width;
+            var yScale = (double)(size.Height) / bounds.Height;
+
+            var x = (int)(position.X * xScale);
+            var y = (int)(position.Y * yScale);
+
+            //Cursor.Position = new Point(x, y); -- release feature
         }
 
         private void DisplayErrorMessage(string message)
@@ -191,7 +213,11 @@ namespace Client
 
         private void pbScreen_MouseMove(object sender, MouseEventArgs e)
         {
-            client.MouseCoordinates = Cursor.Position;
+            var x = Cursor.Position.X - this.Left - pbScreen.Left - X_DELAY;
+            var y = Cursor.Position.Y - this.Top - pbScreen.Top - Y_DELAY;
+            var point = new Point(x, y);
+
+            client.MouseCoordinates = point;
         }
     }
 }
