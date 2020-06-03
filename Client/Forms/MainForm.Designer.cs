@@ -227,6 +227,7 @@
             this.bFullScreen.TabIndex = 13;
             this.bFullScreen.Text = "Полный экран";
             this.bFullScreen.UseVisualStyleBackColor = true;
+            this.bFullScreen.Click += new System.EventHandler(this.bFullScreen_Click);
             // 
             // label6
             // 
@@ -275,6 +276,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "RemoteScreen";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.SizeChanged += new System.EventHandler(this.MainForm_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.pbScreen)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

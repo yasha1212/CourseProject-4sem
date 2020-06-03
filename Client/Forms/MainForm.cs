@@ -18,12 +18,13 @@ namespace Client
     {
         private const double WIDTH_SCALE = 1.33043478;
         private const double HEIGHT_SCALE = 1.22878229;
-
-        const int Y_DELAY = 84;
-        const int X_DELAY = 10;
+        private const int Y_DELAY = 84;
+        private const int X_DELAY = 10;
+        private readonly Size NORMAL_DISPLAY_SIZE;
 
         private ClientService client;
         private int fps;
+        private bool isFormLoading = true;
 
         public MainForm()
         {
@@ -43,6 +44,7 @@ namespace Client
             client.SetRequestHandler(DisplayRequestBox);
 
             DPIUtility.SetDpiAwareness();
+            NORMAL_DISPLAY_SIZE = pbScreen.Size;
             SetAppWindow();
         }
 
@@ -133,6 +135,7 @@ namespace Client
                 bConnect.Enabled = false;
                 tbRemotePort.Enabled = false;
                 tbRemoteIP.Enabled = false;
+                this.MaximizeBox = true;
                 bDisconnect.Enabled = true;
                 bFullScreen.Enabled = true;
             }
@@ -145,6 +148,8 @@ namespace Client
 
         private void bStart_Click(object sender, EventArgs e)
         {
+            isFormLoading = false;
+
             if (CheckUtility.IsCorrectPort(tbPort.Text))
             {
                 client.Port = int.Parse(tbPort.Text);
@@ -187,8 +192,10 @@ namespace Client
             bDisconnect.Enabled = false;
             bFullScreen.Enabled = false;
             bConnect.Enabled = false;
+            this.MaximizeBox = false;
             tbRemoteIP.Enabled = true;
             tbRemotePort.Enabled = true;
+
             if (pbScreen.Image != null)
             {
                 pbScreen.Image.Dispose();
@@ -218,6 +225,41 @@ namespace Client
             var point = new Point(x, y);
 
             client.MouseCoordinates = point;
+        }
+
+        private void bFullScreen_Click(object sender, EventArgs e)
+        {
+            WindowState = FormWindowState.Maximized;
+            MainForm_SizeChanged(sender, e);
+        }
+
+        private void MainForm_SizeChanged(object sender, EventArgs e)
+        {
+            if (!isFormLoading)
+            {
+                if (WindowState == FormWindowState.Maximized)
+                {
+                    foreach (Control control in this.Controls)
+                    {
+                        if (control != pbScreen)
+                        {
+                            control.Visible = false;
+                        }
+                    }
+
+                    pbScreen.Size = this.Size;
+                }
+                else if (WindowState == FormWindowState.Normal)
+                {
+                    foreach (Control control in this.Controls)
+                    {
+                        control.Visible = true;
+                    }
+
+                    pbScreen.Size = NORMAL_DISPLAY_SIZE;
+                    pbScreen.Bounds = GetCorrectSize(pbScreen);
+                }
+            }
         }
     }
 }
