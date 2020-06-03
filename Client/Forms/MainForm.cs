@@ -97,7 +97,7 @@ namespace Client
             var x = (int)(position.X * xScale);
             var y = (int)(position.Y * yScale);
 
-            Cursor.Position = new Point(x, y); -- release feature
+            Cursor.Position = new Point(x, y);
         }
 
         private void DisplayErrorMessage(string message)
