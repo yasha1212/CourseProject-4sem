@@ -28,6 +28,7 @@ namespace Client
             InitializeForm();
 
             client = ClientService.GetInstance();
+            client.FPS = fps;
             client.SetUpdateHandler(UpdateRemoteDisplay);
             client.SetErrorHandler(DisplayErrorMessage);
 
