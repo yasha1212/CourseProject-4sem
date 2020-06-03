@@ -46,6 +46,10 @@
             this.label6 = new System.Windows.Forms.Label();
             this.cbFPS = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.tbX = new System.Windows.Forms.TextBox();
+            this.tbY = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbScreen)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -60,6 +64,7 @@
             this.pbScreen.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbScreen.TabIndex = 0;
             this.pbScreen.TabStop = false;
+            this.pbScreen.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbScreen_MouseMove);
             // 
             // bConnect
             // 
@@ -261,11 +266,55 @@
             this.label7.TabIndex = 16;
             this.label7.Text = "FPS передачи";
             // 
+            // tbX
+            // 
+            this.tbX.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbX.Location = new System.Drawing.Point(94, 585);
+            this.tbX.Name = "tbX";
+            this.tbX.ReadOnly = true;
+            this.tbX.Size = new System.Drawing.Size(170, 34);
+            this.tbX.TabIndex = 17;
+            this.tbX.TabStop = false;
+            // 
+            // tbY
+            // 
+            this.tbY.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbY.Location = new System.Drawing.Point(332, 585);
+            this.tbY.Name = "tbY";
+            this.tbY.ReadOnly = true;
+            this.tbY.Size = new System.Drawing.Size(170, 34);
+            this.tbY.TabIndex = 18;
+            this.tbY.TabStop = false;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label8.Location = new System.Drawing.Point(64, 585);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(24, 24);
+            this.label8.TabIndex = 17;
+            this.label8.Text = "X";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label9.Location = new System.Drawing.Point(304, 585);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(22, 24);
+            this.label9.TabIndex = 19;
+            this.label9.Text = "Y";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1206, 574);
+            this.ClientSize = new System.Drawing.Size(1206, 631);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.tbY);
+            this.Controls.Add(this.tbX);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pbScreen);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -278,6 +327,7 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -301,6 +351,10 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox cbFPS;
+        private System.Windows.Forms.TextBox tbX;
+        private System.Windows.Forms.TextBox tbY;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
     }
 }
 

@@ -20,18 +20,21 @@ namespace Client
         private static ClientService instance;
 
         private event Action<Image> UpdateDisplay;
+        private event Action<Point> UpdateMousePosition;
         private event Action<string> HandleError;
         private event Func<bool> HandleRequest;
 
         public int Port { get; set; }
         public IPAddress IP { get; private set; }
         public int FPS { get; set; }
+        public Point MouseCoordinates { get; set; }
 
         private ISerializer serializer;
         private Socket clientSocket;
         private Socket listenSocket;
         private Thread receiveThread;
         private Thread broadcastThread;
+        private Thread mouseUpdateThread;
         private Thread listenThread;
         private IPAddress remoteAddress;
         private int remotePort;
@@ -79,6 +82,11 @@ namespace Client
             UpdateDisplay += handler;
         }
 
+        public void SetMouseUpdateHandler(Action<Point> handler)
+        {
+            UpdateMousePosition += handler;
+        }
+
         public void SetErrorHandler(Action<string> handler)
         {
             HandleError += handler;
@@ -118,6 +126,7 @@ namespace Client
         private ClientService()
         {
             serializer = new BinarySerializeService();
+            MouseCoordinates = Point.Empty;
         }
 
         private void Listen()
@@ -182,6 +191,22 @@ namespace Client
                 }
             }
             HandleError?.Invoke("Трансляция экрана завершена.");
+        }
+
+        private void SendMouseCoordinates()
+        {
+            while (clientSocket.Connected)
+            {
+                try
+                {
+                    var package = new DestinationPackage(MouseCoordinates, PackageType.DestinationPackage);
+
+                    clientSocket.Send(serializer.Serialize(package));
+                }
+                catch
+                {
+                }
+            }
         }
 
         private void ReceivePackages()
@@ -254,6 +279,11 @@ namespace Client
                         HandleError?.Invoke("Пользователь отказал вам в соединении.");
                         Disconnect();
                     }
+                    else
+                    {
+                        mouseUpdateThread = new Thread(SendMouseCoordinates);
+                        mouseUpdateThread.Start();
+                    }
 
                     break;
 
@@ -262,6 +292,14 @@ namespace Client
                     var image = (package as SourcePackage).Screenshot;
 
                     UpdateDisplay?.Invoke(image);
+
+                    break;
+
+                case PackageType.DestinationPackage:
+
+                    var coordinates = (package as DestinationPackage).MouseCoordinates;
+
+                    UpdateMousePosition?.Invoke(coordinates);
 
                     break;
             }

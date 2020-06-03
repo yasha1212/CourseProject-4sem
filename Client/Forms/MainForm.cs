@@ -31,6 +31,7 @@ namespace Client
             client.FPS = fps;
             client.SetUpdateHandler(UpdateRemoteDisplay);
             client.SetErrorHandler(DisplayErrorMessage);
+            client.SetMouseUpdateHandler(UpdateMousePosition);
             client.SetRequestHandler(DisplayRequestBox);
 
             DPIUtility.SetDpiAwareness();
@@ -67,6 +68,12 @@ namespace Client
         private void UpdateRemoteDisplay(Image last)
         {
             pbScreen.Image = last;
+        }
+
+        private void UpdateMousePosition(Point position)
+        {
+            tbX.Text = position.X.ToString();
+            tbY.Text = position.Y.ToString();
         }
 
         private void DisplayErrorMessage(string message)
@@ -180,6 +187,11 @@ namespace Client
             {
                 bConnect_Click(sender, e);
             }
+        }
+
+        private void pbScreen_MouseMove(object sender, MouseEventArgs e)
+        {
+            client.MouseCoordinates = Cursor.Position;
         }
     }
 }
