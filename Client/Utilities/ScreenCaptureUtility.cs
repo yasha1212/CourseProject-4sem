@@ -30,5 +30,17 @@ namespace Client
         {
             return (int)(1000 / fps - SENDING_DELAY);
         }
+
+        public static (Point, Rectangle) GetRealMouseCoordinates(Point position, Rectangle bounds)
+        {
+            var size = Screen.PrimaryScreen.Bounds;
+            var xScale = (double)(size.Width) / bounds.Width;
+            var yScale = (double)(size.Height) / bounds.Height;
+
+            var x = (int)(position.X * xScale);
+            var y = (int)(position.Y * yScale);
+
+            return (new Point(x, y), size);
+        }
     }
 }

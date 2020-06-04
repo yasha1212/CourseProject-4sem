@@ -191,7 +191,6 @@ namespace Client
                     Disconnect();
                 }
             }
-            HandleError?.Invoke("Трансляция экрана завершена.");
         }
 
         private void SendMouseCoordinates()
@@ -200,7 +199,9 @@ namespace Client
             {
                 try
                 {
-                    var package = new DestinationPackage(MouseCoordinates, DisplayBounds, PackageType.DestinationPackage);
+                    var mouseParameters = ScreenCaptureUtility.GetRealMouseCoordinates(MouseCoordinates, DisplayBounds);
+
+                    var package = new DestinationPackage(mouseParameters.Item1, mouseParameters.Item2, PackageType.DestinationPackage);
 
                     clientSocket.Send(serializer.Serialize(package));
                 }
@@ -251,7 +252,6 @@ namespace Client
                     Disconnect();
                 }
             }
-            HandleError?.Invoke("Источник больше не доступен.");
         }
 
         private void HandlePackage(Package package)

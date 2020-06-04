@@ -36,16 +36,18 @@
             this.tbRemoteIP = new System.Windows.Forms.TextBox();
             this.bStart = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.bDisconnect = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.cbFPS = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.bFullScreen = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.bFullScreen = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.cbFPS = new System.Windows.Forms.ComboBox();
-            this.label7 = new System.Windows.Forms.Label();
+            this.bDisconnect = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tbX = new System.Windows.Forms.TextBox();
+            this.tbY = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbScreen)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -155,37 +157,61 @@
             this.panel1.Size = new System.Drawing.Size(353, 554);
             this.panel1.TabIndex = 7;
             // 
-            // label1
+            // label7
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(3, 40);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(55, 24);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Порт";
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label7.Location = new System.Drawing.Point(125, 340);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(138, 24);
+            this.label7.TabIndex = 16;
+            this.label7.Text = "FPS передачи";
             // 
-            // label2
+            // cbFPS
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(298, 40);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 24);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "Адрес";
+            this.cbFPS.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbFPS.FormattingEnabled = true;
+            this.cbFPS.Items.AddRange(new object[] {
+            "60",
+            "45",
+            "30"});
+            this.cbFPS.Location = new System.Drawing.Point(3, 379);
+            this.cbFPS.Name = "cbFPS";
+            this.cbFPS.Size = new System.Drawing.Size(345, 37);
+            this.cbFPS.TabIndex = 15;
             // 
-            // bDisconnect
+            // label6
             // 
-            this.bDisconnect.Enabled = false;
-            this.bDisconnect.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.bDisconnect.Location = new System.Drawing.Point(3, 205);
-            this.bDisconnect.Name = "bDisconnect";
-            this.bDisconnect.Size = new System.Drawing.Size(345, 43);
-            this.bDisconnect.TabIndex = 9;
-            this.bDisconnect.Text = "Отключиться";
-            this.bDisconnect.UseVisualStyleBackColor = true;
-            this.bDisconnect.Click += new System.EventHandler(this.bDisconnect_Click);
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label6.Location = new System.Drawing.Point(105, 67);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(183, 24);
+            this.label6.TabIndex = 14;
+            this.label6.Text = "Личные параметры";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // bFullScreen
+            // 
+            this.bFullScreen.Enabled = false;
+            this.bFullScreen.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.bFullScreen.Location = new System.Drawing.Point(3, 254);
+            this.bFullScreen.Name = "bFullScreen";
+            this.bFullScreen.Size = new System.Drawing.Size(345, 43);
+            this.bFullScreen.TabIndex = 13;
+            this.bFullScreen.Text = "Полный экран";
+            this.bFullScreen.UseVisualStyleBackColor = true;
+            this.bFullScreen.Click += new System.EventHandler(this.bFullScreen_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label5.Location = new System.Drawing.Point(95, 451);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(199, 24);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "Удалённый источник";
             // 
             // label3
             // 
@@ -207,67 +233,65 @@
             this.label4.TabIndex = 10;
             this.label4.Text = "Порт";
             // 
-            // label5
+            // bDisconnect
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label5.Location = new System.Drawing.Point(95, 451);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(199, 24);
-            this.label5.TabIndex = 12;
-            this.label5.Text = "Удалённый источник";
+            this.bDisconnect.Enabled = false;
+            this.bDisconnect.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.bDisconnect.Location = new System.Drawing.Point(3, 205);
+            this.bDisconnect.Name = "bDisconnect";
+            this.bDisconnect.Size = new System.Drawing.Size(345, 43);
+            this.bDisconnect.TabIndex = 9;
+            this.bDisconnect.Text = "Отключиться";
+            this.bDisconnect.UseVisualStyleBackColor = true;
+            this.bDisconnect.Click += new System.EventHandler(this.bDisconnect_Click);
             // 
-            // bFullScreen
+            // label2
             // 
-            this.bFullScreen.Enabled = false;
-            this.bFullScreen.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.bFullScreen.Location = new System.Drawing.Point(3, 254);
-            this.bFullScreen.Name = "bFullScreen";
-            this.bFullScreen.Size = new System.Drawing.Size(345, 43);
-            this.bFullScreen.TabIndex = 13;
-            this.bFullScreen.Text = "Полный экран";
-            this.bFullScreen.UseVisualStyleBackColor = true;
-            this.bFullScreen.Click += new System.EventHandler(this.bFullScreen_Click);
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.Location = new System.Drawing.Point(298, 40);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(67, 24);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "Адрес";
             // 
-            // label6
+            // label1
             // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label6.Location = new System.Drawing.Point(105, 67);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(183, 24);
-            this.label6.TabIndex = 14;
-            this.label6.Text = "Личные параметры";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(3, 40);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(55, 24);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Порт";
             // 
-            // cbFPS
+            // tbX
             // 
-            this.cbFPS.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbFPS.FormattingEnabled = true;
-            this.cbFPS.Items.AddRange(new object[] {
-            "60",
-            "45",
-            "30"});
-            this.cbFPS.Location = new System.Drawing.Point(3, 379);
-            this.cbFPS.Name = "cbFPS";
-            this.cbFPS.Size = new System.Drawing.Size(345, 37);
-            this.cbFPS.TabIndex = 15;
+            this.tbX.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbX.Location = new System.Drawing.Point(301, 572);
+            this.tbX.Name = "tbX";
+            this.tbX.ReadOnly = true;
+            this.tbX.Size = new System.Drawing.Size(170, 34);
+            this.tbX.TabIndex = 17;
+            this.tbX.TabStop = false;
             // 
-            // label7
+            // tbY
             // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label7.Location = new System.Drawing.Point(125, 340);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(138, 24);
-            this.label7.TabIndex = 16;
-            this.label7.Text = "FPS передачи";
+            this.tbY.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbY.Location = new System.Drawing.Point(540, 572);
+            this.tbY.Name = "tbY";
+            this.tbY.ReadOnly = true;
+            this.tbY.Size = new System.Drawing.Size(170, 34);
+            this.tbY.TabIndex = 18;
+            this.tbY.TabStop = false;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1206, 572);
+            this.ClientSize = new System.Drawing.Size(1206, 605);
+            this.Controls.Add(this.tbY);
+            this.Controls.Add(this.tbX);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pbScreen);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -281,6 +305,7 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -304,6 +329,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox cbFPS;
+        private System.Windows.Forms.TextBox tbX;
+        private System.Windows.Forms.TextBox tbY;
     }
 }
 

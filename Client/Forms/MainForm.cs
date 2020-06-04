@@ -90,14 +90,9 @@ namespace Client
 
         private void UpdateMousePosition(Point position, Rectangle bounds)
         {
-            var size = Screen.PrimaryScreen.Bounds;
-            var xScale = (double)(size.Width) / bounds.Width;
-            var yScale = (double)(size.Height) / bounds.Height;
+            var parameters = ScreenCaptureUtility.GetRealMouseCoordinates(position, bounds);
 
-            var x = (int)(position.X * xScale);
-            var y = (int)(position.Y * yScale);
-
-            Cursor.Position = new Point(x, y);
+            Cursor.Position = parameters.Item1;
         }
 
         private void DisplayErrorMessage(string message)
