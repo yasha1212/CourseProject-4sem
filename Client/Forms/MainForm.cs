@@ -18,12 +18,9 @@ namespace Client
     {
         private const double WIDTH_SCALE = 1.33043478;
         private const double HEIGHT_SCALE = 1.22878229;
-        private const int Y_DELAY = 84;
-        private const int X_DELAY = 10;
         private readonly Size NORMAL_DISPLAY_SIZE;
 
         private ClientService client;
-        private int fps;
         private bool isFormLoading = true;
 
         public MainForm()
@@ -31,17 +28,11 @@ namespace Client
             InitializeComponent();
             InitializeForm();
 
-            var bounds = new Rectangle();
-            bounds.Width = 817;
-            bounds.Height = 458;
-
             client = ClientService.GetInstance();
-            client.FPS = fps;
-            client.DisplayBounds = bounds;
             client.SetUpdateHandler(UpdateRemoteDisplay);
             client.SetErrorHandler(DisplayErrorMessage);
-            client.SetMouseUpdateHandler(UpdateMousePosition);
             client.SetRequestHandler(DisplayRequestBox);
+            SetStandartValues();
 
             DPIUtility.SetDpiAwareness();
             NORMAL_DISPLAY_SIZE = pbScreen.Size;
@@ -51,7 +42,16 @@ namespace Client
         private void InitializeForm()
         {
             cbFPS.SelectedItem = cbFPS.Items[0];
-            fps = int.Parse(cbFPS.SelectedItem.ToString());
+        }
+
+        private void SetStandartValues()
+        {
+            var bounds = new Rectangle();
+            bounds.Width = 817;
+            bounds.Height = 458;
+
+            client.FPS = 60;
+            client.MouseParameters.AreaBounds = bounds;
         }
 
         private void SetAppWindow()
@@ -86,13 +86,6 @@ namespace Client
         private void UpdateRemoteDisplay(Image last)
         {
             pbScreen.Image = last;
-        }
-
-        private void UpdateMousePosition(Point position, Rectangle bounds)
-        {
-            var parameters = ScreenCaptureUtility.GetRealMouseCoordinates(position, bounds);
-
-            Cursor.Position = parameters.Item1;
         }
 
         private void DisplayErrorMessage(string message)
@@ -208,15 +201,6 @@ namespace Client
             }
         }
 
-        private void pbScreen_MouseMove(object sender, MouseEventArgs e)
-        {
-            var x = Cursor.Position.X - this.Left - pbScreen.Left - X_DELAY;
-            var y = Cursor.Position.Y - this.Top - pbScreen.Top - Y_DELAY;
-            var point = new Point(x, y);
-
-            client.MouseCoordinates = point;
-        }
-
         private void bFullScreen_Click(object sender, EventArgs e)
         {
             WindowState = FormWindowState.Maximized;
@@ -250,6 +234,26 @@ namespace Client
                     pbScreen.Bounds = GetCorrectSize(pbScreen);
                 }
             }
+        }
+
+        private Point GetCoordsOnDisplay()
+        {
+            const int Y_DELAY = 84;
+            const int X_DELAY = 10;
+
+            var x = Cursor.Position.X - this.Left - pbScreen.Left - X_DELAY;
+            var y = Cursor.Position.Y - this.Top - pbScreen.Top - Y_DELAY;
+
+            return new Point(x, y);
+        }
+
+        private void pbScreen_MouseClick(object sender, MouseEventArgs e)
+        {
+            var position = GetCoordsOnDisplay();
+            var bounds = client.MouseParameters.AreaBounds;
+
+            client.MouseParameters = new MouseOperationArgs(position, e.Button, bounds);
+            client.SendMouseCoordinates();
         }
     }
 }

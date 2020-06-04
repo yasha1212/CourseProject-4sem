@@ -11,8 +11,8 @@ namespace Client
     {
         ConnectionRequest,
         ConnectionResponse,
-        SourcePackage,
-        DestinationPackage
+        ImagePackage,
+        MouseInfoPackage
     }
 
     [Serializable]

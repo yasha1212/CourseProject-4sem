@@ -46,8 +46,6 @@
             this.bDisconnect = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.tbX = new System.Windows.Forms.TextBox();
-            this.tbY = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbScreen)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -62,7 +60,7 @@
             this.pbScreen.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbScreen.TabIndex = 0;
             this.pbScreen.TabStop = false;
-            this.pbScreen.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbScreen_MouseMove);
+            this.pbScreen.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pbScreen_MouseClick);
             // 
             // bConnect
             // 
@@ -265,33 +263,11 @@
             this.label1.TabIndex = 7;
             this.label1.Text = "Порт";
             // 
-            // tbX
-            // 
-            this.tbX.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tbX.Location = new System.Drawing.Point(301, 572);
-            this.tbX.Name = "tbX";
-            this.tbX.ReadOnly = true;
-            this.tbX.Size = new System.Drawing.Size(170, 34);
-            this.tbX.TabIndex = 17;
-            this.tbX.TabStop = false;
-            // 
-            // tbY
-            // 
-            this.tbY.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tbY.Location = new System.Drawing.Point(540, 572);
-            this.tbY.Name = "tbY";
-            this.tbY.ReadOnly = true;
-            this.tbY.Size = new System.Drawing.Size(170, 34);
-            this.tbY.TabIndex = 18;
-            this.tbY.TabStop = false;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1206, 605);
-            this.Controls.Add(this.tbY);
-            this.Controls.Add(this.tbX);
+            this.ClientSize = new System.Drawing.Size(1206, 575);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pbScreen);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -305,7 +281,6 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -329,8 +304,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox cbFPS;
-        private System.Windows.Forms.TextBox tbX;
-        private System.Windows.Forms.TextBox tbY;
     }
 }
 

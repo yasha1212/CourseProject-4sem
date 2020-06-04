@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 namespace Client
 {
     [Serializable]
-    public class SourcePackage : Package
+    public class ImagePackage : Package
     {
         public Image Screenshot { get; private set; }
 
-        public SourcePackage(Image screenshot, PackageType type) : base(type)
+        public ImagePackage(Image screenshot, PackageType type) : base(type)
         {
             Screenshot = screenshot;
         }

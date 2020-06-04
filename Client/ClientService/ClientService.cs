@@ -9,6 +9,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Client
 {
@@ -20,22 +21,19 @@ namespace Client
         private static ClientService instance;
 
         private event Action<Image> UpdateDisplay;
-        private event Action<Point, Rectangle> UpdateMousePosition;
         private event Action<string> HandleError;
         private event Func<bool> HandleRequest;
 
         public int Port { get; set; }
         public IPAddress IP { get; private set; }
         public int FPS { get; set; }
-        public Point MouseCoordinates { get; set; }
-        public Rectangle DisplayBounds { get; set; }
+        public MouseOperationArgs MouseParameters { get; set; }
 
         private ISerializer serializer;
         private Socket clientSocket;
         private Socket listenSocket;
         private Thread receiveThread;
         private Thread broadcastThread;
-        private Thread mouseUpdateThread;
         private Thread listenThread;
         private IPAddress remoteAddress;
         private int remotePort;
@@ -83,11 +81,6 @@ namespace Client
             UpdateDisplay += handler;
         }
 
-        public void SetMouseUpdateHandler(Action<Point, Rectangle> handler)
-        {
-            UpdateMousePosition += handler;
-        }
-
         public void SetErrorHandler(Action<string> handler)
         {
             HandleError += handler;
@@ -127,7 +120,7 @@ namespace Client
         private ClientService()
         {
             serializer = new BinarySerializeService();
-            MouseCoordinates = Point.Empty;
+            MouseParameters = new MouseOperationArgs();
         }
 
         private void Listen()
@@ -179,7 +172,7 @@ namespace Client
                 try
                 {
                     var screenshot = ScreenCaptureUtility.CaptureDesktop();
-                    var package = new SourcePackage(screenshot, PackageType.SourcePackage);
+                    var package = new ImagePackage(screenshot, PackageType.ImagePackage);
 
                     clientSocket.Send(serializer.Serialize(package));
 
@@ -193,15 +186,13 @@ namespace Client
             }
         }
 
-        private void SendMouseCoordinates()
+        public void SendMouseCoordinates()
         {
-            while (clientSocket.Connected)
+            if (clientSocket.Connected)
             {
                 try
                 {
-                    var mouseParameters = ScreenCaptureUtility.GetRealMouseCoordinates(MouseCoordinates, DisplayBounds);
-
-                    var package = new DestinationPackage(mouseParameters.Item1, mouseParameters.Item2, PackageType.DestinationPackage);
+                    var package = new MouseInfoPackage(MouseParameters, PackageType.MouseInfoPackage);
 
                     clientSocket.Send(serializer.Serialize(package));
                 }
@@ -280,28 +271,22 @@ namespace Client
                         HandleError?.Invoke("Пользователь отказал вам в соединении.");
                         Disconnect();
                     }
-                    else
-                    {
-                        mouseUpdateThread = new Thread(SendMouseCoordinates);
-                        mouseUpdateThread.Start();
-                    }
 
                     break;
 
-                case PackageType.SourcePackage:
+                case PackageType.ImagePackage:
 
-                    var image = (package as SourcePackage).Screenshot;
+                    var image = (package as ImagePackage).Screenshot;
 
                     UpdateDisplay?.Invoke(image);
 
                     break;
 
-                case PackageType.DestinationPackage:
+                case PackageType.MouseInfoPackage:
 
-                    var coordinates = (package as DestinationPackage).MouseCoordinates;
-                    var bounds = (package as DestinationPackage).Bounds;
+                    var parameters = (package as MouseInfoPackage).MouseParameters;
 
-                    UpdateMousePosition?.Invoke(coordinates, bounds);
+                    MouseOperationsUtility.DoMouseEvent(parameters);
 
                     break;
             }
