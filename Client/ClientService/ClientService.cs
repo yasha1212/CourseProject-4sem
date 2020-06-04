@@ -61,8 +61,17 @@ namespace Client
 
         public void Disconnect()
         {
-            receiveThread?.Join(1);
+            try
+            {
+                clientSocket?.Shutdown(SocketShutdown.Both);
+            }
+            catch
+            {
+            }
             clientSocket?.Close();
+
+            broadcastThread?.Join(1);
+            receiveThread?.Join(1);
         }
 
         public void Connect()
@@ -180,7 +189,6 @@ namespace Client
                 }
                 catch
                 {
-                    HandleError?.Invoke("Соединение было разорвано.");
                     Disconnect();
                 }
             }
@@ -238,8 +246,7 @@ namespace Client
                 }
                 catch
                 {
-                    HandleError?.Invoke("Соединение было разорвано.");
-                    Thread.CurrentThread.Join(1);
+                    HandleError?.Invoke("Соединение было разорвано. " + Port.ToString());
                     Disconnect();
                 }
             }
