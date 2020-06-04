@@ -16,11 +16,8 @@ namespace Client
 {
     public partial class MainForm : Form
     {
-        private const double WIDTH_SCALE = 1.33043478;
-        private const double HEIGHT_SCALE = 1.22878229;
-        private readonly Size NORMAL_DISPLAY_SIZE;
-
         private ClientService client;
+        private MainFormModel model;
         private bool isFormLoading = true;
 
         public MainForm()
@@ -35,8 +32,8 @@ namespace Client
             SetStandartValues();
 
             DPIUtility.SetDpiAwareness();
-            NORMAL_DISPLAY_SIZE = pbScreen.Size;
-            SetAppWindow();
+            model = new MainFormModel(pbScreen.Size);
+            model.SetAppWindow(this);
         }
 
         private void InitializeForm()
@@ -52,35 +49,6 @@ namespace Client
 
             client.FPS = 60;
             client.MouseParameters.AreaBounds = bounds;
-        }
-
-        private void SetAppWindow()
-        {
-            this.Height = (int)(this.Height * HEIGHT_SCALE);
-            this.Width = (int)(this.Width * WIDTH_SCALE);
-            ChangeSizes(this);
-        }
-
-        private Rectangle GetCorrectSize(Control control)
-        {
-            var rectangle = new Rectangle();
-            rectangle.Width = (int)(control.Width * WIDTH_SCALE);
-            rectangle.Height = (int)(control.Height * HEIGHT_SCALE);
-            rectangle.Location = new Point((int)(control.Location.X * WIDTH_SCALE), (int)(control.Location.Y * HEIGHT_SCALE));
-
-            return rectangle;
-        }
-
-        private void ChangeSizes(Control master)
-        {
-            foreach (Control child in master.Controls)
-            {
-                child.Bounds = GetCorrectSize(child);
-                if (child.GetType() == typeof(Panel))
-                {
-                    ChangeSizes(child);
-                }
-            }
         }
 
         private void UpdateRemoteDisplay(Image last)
@@ -230,26 +198,15 @@ namespace Client
                         control.Visible = true;
                     }
 
-                    pbScreen.Size = NORMAL_DISPLAY_SIZE;
-                    pbScreen.Bounds = GetCorrectSize(pbScreen);
+                    pbScreen.Size = model.NORMAL_DISPLAY_SIZE;
+                    pbScreen.Bounds = model.GetCorrectSize(pbScreen);
                 }
             }
         }
 
-        private Point GetCoordsOnDisplay()
-        {
-            const int Y_DELAY = 84;
-            const int X_DELAY = 10;
-
-            var x = Cursor.Position.X - this.Left - pbScreen.Left - X_DELAY;
-            var y = Cursor.Position.Y - this.Top - pbScreen.Top - Y_DELAY;
-
-            return new Point(x, y);
-        }
-
         private void pbScreen_MouseClick(object sender, MouseEventArgs e)
         {
-            var position = GetCoordsOnDisplay();
+            var position = model.GetCoordsOnDisplay(this);
             var bounds = client.MouseParameters.AreaBounds;
 
             client.MouseParameters = new MouseOperationArgs(position, e.Button, bounds);
